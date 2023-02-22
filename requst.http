@@ -1,4 +1,4 @@
-POST http://localhost:5001/user/login
+POST http://localhost:5001/user/get-otp
 Content-Type: application/json
 
 {

@@ -6,6 +6,7 @@ const { AllRoutes } = require("./router/router")
 const createErrors = require("http-errors")
 const swaggerUi = require("swagger-ui-express")
 const swaggerJsDoc = require("swagger-jsdoc")
+const cors = require("cors")
 
 module.exports = class Application {
     #app = express()
@@ -19,8 +20,10 @@ module.exports = class Application {
         this.createServer();
         this.createRoutes();
         this.errorHandling();
+        this.initRedis();
     }
     configApplication(){
+        this.#app.use(cors())
         this.#app.use(morgan("dev"))
         this.#app.use(express.json());
         this.#app.use(express.urlencoded({extended : true}));
@@ -66,6 +69,9 @@ module.exports = class Application {
             await mongoose.connection.close();
             process.exit(0)
         })
+    }
+    initRedis(){
+        require("./utils/init-redis")
     }
     createRoutes(){
         this.#app.use(AllRoutes)
